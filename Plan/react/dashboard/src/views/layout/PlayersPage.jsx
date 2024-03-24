@@ -2,7 +2,7 @@ import React, {useEffect, useState} from "react";
 import {useTranslation} from "react-i18next";
 import {Outlet} from "react-router-dom";
 import {useNavigation} from "../../hooks/navigationHook";
-import {faSearch} from "@fortawesome/free-solid-svg-icons";
+import {faSearch, faMap} from "@fortawesome/free-solid-svg-icons";
 import Sidebar from "../../components/navigation/Sidebar";
 import Header from "../../components/navigation/Header";
 import ColorSelectorModal from "../../components/modal/ColorSelectorModal";
@@ -25,6 +25,7 @@ const PlayersPage = () => {
         const items = staticSite ? [] : [
             {name: 'html.label.links'},
             {name: 'html.label.query', icon: faSearch, href: "/query"},
+            {name: 'Map', icon: faMap, href: "https://map.tqmcraft.net:1145"},
         ]
 
         setSidebarItems(items);
