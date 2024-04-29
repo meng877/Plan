@@ -95,10 +95,19 @@ dependencies {
     testArtifacts project(":extensions:adventure")
     testImplementation project(":extensions:adventure")
     testImplementation "com.google.code.gson:gson:$gsonVersion"
-    testImplementation "org.seleniumhq.selenium:selenium-java:4.18.1"
+    testImplementation "org.seleniumhq.selenium:selenium-java:4.19.1"
     testImplementation "org.testcontainers:testcontainers:$testContainersVersion"
     testImplementation "org.testcontainers:junit-jupiter:$testContainersVersion"
     testImplementation "org.testcontainers:nginx:$testContainersVersion"
+}
+
+test {
+    environment "PLAN_TEST_NODE_STRING", "String"
+    environment "PLAN_TEST_NODE_BOOLEAN", "true"
+    environment "PLAN_TEST_NODE_INTEGER", "5"
+    environment "PLAN_TEST_NODE_DOUBLE", "0.5"
+    environment "PLAN_TEST_NODE_LONG", "9223372036854775807"
+    environment "PLAN_TEST_NODE_STRINGLIST", "- Test\n- Another"
 }
 
 task updateVersion(type: Copy) {
