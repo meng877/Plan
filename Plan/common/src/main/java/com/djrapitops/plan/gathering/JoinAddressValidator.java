@@ -25,6 +25,8 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Utility for validating and sanitizing join addresses.
@@ -35,6 +37,7 @@ import java.net.URISyntaxException;
 public class JoinAddressValidator {
 
     private final PlanConfig config;
+    private List<String> filteredAddresses;
 
     @Inject
     public JoinAddressValidator(PlanConfig config) {
@@ -42,9 +45,16 @@ public class JoinAddressValidator {
         this.config = config;
     }
 
+    private void prepareFilteredAddresses() {
+        if (filteredAddresses == null) {
+            filteredAddresses = config.get(DataGatheringSettings.FILTER_JOIN_ADDRESSES);
+            if (filteredAddresses == null) filteredAddresses = new ArrayList<>();
+        }
+    }
+
     @Untrusted
     public String sanitize(@Untrusted String address) {
-        if (address == null) return "";
+        if (address == null || config.isFalse(DataGatheringSettings.JOIN_ADDRESSES)) return "";
         if (!address.isEmpty()) {
             // Remove port
             if (address.contains(":")) {
@@ -60,6 +70,10 @@ public class JoinAddressValidator {
             }
             if (config.isFalse(DataGatheringSettings.PRESERVE_JOIN_ADDRESS_CASE)) {
                 address = StringUtils.lowerCase(address);
+            }
+            prepareFilteredAddresses();
+            if (filteredAddresses.contains(address)) {
+                address = "";
             }
         }
         return address;
